@@ -1,0 +1,61 @@
+﻿title: Start
+tags:
+position: 0,0
+---
+<<set $name to "">>
+me: Hey, can you tell me your name?
+<<jump CheckName>>
+
+===
+title: CheckName
+position: 0,150
+---
+<<await_input "text" "$name">>
+<<if $name != "" && $name == get_text("$name")>>
+    me: But... "{$name}" is what you wrote last time
+    me: Is "{$name}" right and you're just having a "new password can't be the same as your old password" moment?
+    -> Yes
+    -> No
+        me: Then I hope you get it right this time
+<<else>>
+    <<set $name to string(get_text("$name"))>>
+    <<if is_blank($name)>>
+        me: You're supposed to write something you know
+        <<jump CheckName>>
+    <<endif>>
+    me: Oh, so your name is "{$name}"?
+    -> Yes
+    -> No
+        Then can you please write your name this time?
+        <<jump CheckName>>
+<<endif>>
+
+<<if has_number($name)>>
+    me: Are you sure? I don't think a lot of names contain any numbers
+    me: Did you spell it wrong?
+    -> Yes
+        me: Then make sure to spell it right this time
+        <<jump CheckName>>
+    -> No
+        me: Really? I know it's not my place to judge, but that is rather odd
+    <<if capitalize_first($name) != $name>>
+        me: Also, I noticed that you didn't capitalize the first letter, should I fix that?
+        -> No, it's a choice
+            me: You really are a... "unique" individual
+        -> Yes, please fix it
+            <<set $name to string(capitalize_first($name))>>
+            me: Okay then, that is fixed!
+    <<endif>>
+<<elseif capitalize_first($name) != $name>>
+    me: I can't help but notice that you didn't capitalize the first letter, should I fix this?
+    -> No, it's a choice
+        me: Okay then
+    -> Yes, please fix it
+        <<set $name to string(capitalize_first($name))>>
+        me: Done and done!
+<<else>>
+    me: That's a nice name.
+<<endif>>
+me: {$name}
+<<allow_fade>>
+===

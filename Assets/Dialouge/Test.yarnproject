@@ -1,0 +1,4 @@
+﻿title: Program
+---
+<<declare $variable = "aaa">>
+===
